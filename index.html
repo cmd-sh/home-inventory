@@ -2,164 +2,609 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="居家物品管理">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>居家物品管理</title>
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="apple-touch-icon" href="icon-192.png">
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body {
-    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    font-family: "Microsoft YaHei", sans-serif;
     background: #f5f7fa;
     padding: 20px;
     max-width: 1400px;
     margin: 0 auto;
-    padding-bottom: 80px; /* 给底部清理栏留空间 */
 }
-h1 { text-align: center; margin-bottom: 15px; color: #303133; }
+h1 {
+    text-align: center;
+    margin-bottom: 15px;
+    color: #303133;
+}
+h1 .emoji { font-size: 1.2em; }
 
 /* 统计概览 */
 .stats-bar {
-    display: flex; justify-content: center; gap: 15px; margin-bottom: 15px; flex-wrap: wrap;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
 }
 .stat-card {
-    background: #fff; border-radius: 8px; padding: 10px 20px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.08); text-align: center; min-width: 100px;
+    background: #fff;
+    border-radius: 8px;
+    padding: 10px 20px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    text-align: center;
+    min-width: 100px;
 }
-.stat-card .num { font-size: 24px; font-weight: bold; color: #409eff; }
-.stat-card .label { font-size: 12px; color: #909399; margin-top: 2px; }
+.stat-card .num {
+    font-size: 24px;
+    font-weight: bold;
+    color: #409eff;
+}
+.stat-card .label {
+    font-size: 12px;
+    color: #909399;
+    margin-top: 2px;
+}
 .stat-card.warning .num { color: #e6a23c; }
 .stat-card.danger .num { color: #f56c6c; }
 
 /* 顶部工具栏 */
 .top-bar {
-    display: flex; justify-content: center; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; align-items: center;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+    align-items: center;
 }
 .top-bar button {
-    padding: 8px 16px; cursor: pointer; border: none; border-radius: 5px; font-size: 14px;
-    display: inline-flex; align-items: center; gap: 4px;
+    padding: 8px 16px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
 }
 .btn-primary { background: #409eff; color: #fff; }
 .btn-success { background: #67c23a; color: #fff; }
 .btn-warning { background: #e6a23c; color: #fff; }
 .btn-info { background: #909399; color: #fff; }
-.btn-danger { background: #f56c6c; color: #fff; }
 
 /* 搜索栏 */
 .search-bar {
-    display: flex; justify-content: center; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; align-items: center;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+    align-items: center;
 }
 .search-bar input {
-    padding: 8px 14px; border: 1px solid #dcdfe6; border-radius: 20px; font-size: 14px;
-    width: 280px; outline: none; transition: border-color 0.3s;
+    padding: 8px 14px;
+    border: 1px solid #dcdfe6;
+    border-radius: 20px;
+    font-size: 14px;
+    width: 280px;
+    outline: none;
+    transition: border-color 0.3s;
 }
-.search-bar input:focus { border-color: #409eff; }
+.search-bar input:focus {
+    border-color: #409eff;
+}
 .search-bar select {
-    padding: 8px 14px; border: 1px solid #dcdfe6; border-radius: 5px; font-size: 14px; outline: none; cursor: pointer;
+    padding: 8px 14px;
+    border: 1px solid #dcdfe6;
+    border-radius: 5px;
+    font-size: 14px;
+    outline: none;
+    cursor: pointer;
 }
 
 /* Tabs */
-.tabs { display: flex; justify-content: center; gap: 6px; margin-bottom: 20px; flex-wrap: wrap; align-items: center; }
+.tabs {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    align-items: center;
+}
 .tab {
-    padding: 8px 18px; background: #ddd; border-radius: 6px 6px 0 0; cursor: pointer;
-    font-weight: bold; font-size: 14px; display: inline-flex; align-items: center; gap: 6px;
-    transition: all 0.2s; position: relative;
+    padding: 8px 18px;
+    background: #ddd;
+    border-radius: 6px 6px 0 0;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s;
+    position: relative;
 }
 .tab:hover { background: #c6e2ff; }
-.tab.active { background: #409eff; color: #fff; }
+.tab.active {
+    background: #409eff;
+    color: #fff;
+}
 .tab .tab-del {
-    background: rgba(0,0,0,0.15); border-radius: 50%; width: 18px; height: 18px;
-    display: inline-flex; align-items: center; justify-content: center; font-size: 12px; cursor: pointer; line-height: 1;
+    background: rgba(0,0,0,0.15);
+    border-radius: 50%;
+    width: 18px; height: 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    cursor: pointer;
+    line-height: 1;
 }
 .tab .tab-del:hover { background: rgba(0,0,0,0.3); }
-.tab .tab-count { font-size: 11px; background: rgba(255,255,255,0.3); border-radius: 8px; padding: 0 5px; font-weight: normal; }
+.tab .tab-count {
+    font-size: 11px;
+    background: rgba(255,255,255,0.3);
+    border-radius: 8px;
+    padding: 0 5px;
+    font-weight: normal;
+}
 
 /* Section */
-.section { background: #fff; border-radius: 8px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
-.section h3 { margin: 0 0 10px 0; color: #409eff; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-.section h3 button { font-size: 12px; padding: 3px 8px; border: none; border-radius: 3px; cursor: pointer; color: #fff; }
+.section {
+    background: #fff;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+.section h3 {
+    margin: 0 0 10px 0;
+    color: #409eff;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.section h3 button {
+    font-size: 12px;
+    padding: 3px 8px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    color: #fff;
+}
 .btn-add-item { background: #67c23a; }
 .btn-del-subcat { background: #909399; }
 
-.add-subcat-bar { text-align: center; margin-top: 15px; padding-top: 15px; border-top: 1px dashed #ddd; }
-.add-subcat-bar button { padding: 8px 20px; background: #67c23a; color: #fff; border: none; border-radius: 5px; cursor: pointer; font-size: 14px; }
-
-/* 批量清理栏 */
-.clean-bar {
-    position: sticky; bottom: 0; background: #fff; border-top: 1px solid #ebeef5;
-    padding: 12px 15px; margin: 15px -20px -20px; display: flex; justify-content: space-between; align-items: center;
-    flex-wrap: wrap; gap: 10px; box-shadow: 0 -2px 8px rgba(0,0,0,0.05);
+.add-subcat-bar {
+    text-align: center;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px dashed #ddd;
 }
-.clean-bar .left { display: flex; align-items: center; gap: 8px; font-size: 14px; }
-.clean-bar .right { display: flex; gap: 10px; }
+.add-subcat-bar button {
+    padding: 8px 20px;
+    background: #67c23a;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
 
-table { width: 100%; border-collapse: collapse; font-size: 14px; }
-th, td { border: 1px solid #ebeef5; padding: 6px; text-align: center; vertical-align: middle; }
+/* Table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+th, td {
+    border: 1px solid #ebeef5;
+    padding: 6px;
+    text-align: center;
+    vertical-align: middle;
+}
 th { background: #f5f7fa; color: #606266; font-weight: bold; }
 tbody tr:hover { background: #f5f7fa; }
 .expired { background: #ffe6e6 !important; color: #c00; font-weight: bold; }
 .warning { background: #fff3cd !important; }
-select, input { padding: 4px; width: 95%; box-sizing: border-box; border: 1px solid #ccc; border-radius: 3px; }
-.qty-input { width: 90px; text-align: center; }
-.note-input { width: 140px; }
-select.location-sel { width: 110px; }
+select, input {
+    padding: 4px;
+    width: 95%;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+.qty-input {
+    width: 90px;
+    text-align: center;
+}
+
 button { transition: opacity 0.2s; }
 button:hover { opacity: 0.85; }
 
 /* Modal */
 .modal-mask {
-    display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.4); justify-content: center; align-items: center; z-index: 1000;
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.4);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
 }
 .modal {
-    background: #fff; padding: 25px; border-radius: 10px; width: 400px; max-width: 92vw;
-    max-height: 90vh; overflow-y: auto; box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    background: #fff;
+    padding: 25px;
+    border-radius: 10px;
+    width: 380px;
+    max-width: 90vw;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
 }
 .modal h3 { margin-bottom: 15px; color: #303133; }
 .modal input, .modal select {
-    width: 100%; margin-bottom: 15px; padding: 8px; border: 1px solid #dcdfe6;
-    border-radius: 5px; font-size: 14px; box-sizing: border-box;
+    width: 100%;
+    margin-bottom: 15px;
+    padding: 8px;
+    border: 1px solid #dcdfe6;
+    border-radius: 5px;
+    font-size: 14px;
+    box-sizing: border-box;
 }
-.modal-buttons { display: flex; gap: 10px; justify-content: flex-end; }
-
-/* 位置管理 */
-.loc-manage { text-align: left; }
-.loc-manage .loc-row { display: flex; gap: 8px; align-items: center; margin-bottom: 12px; }
-.loc-manage .loc-row input { margin-bottom: 0; flex: 1; }
-.loc-manage .sub-loc { margin-left: 20px; margin-bottom: 10px; }
-.loc-manage .sub-tag {
-    display: inline-flex; align-items: center; gap: 4px; background: #eef3ff; color: #409eff;
-    padding: 3px 8px; border-radius: 12px; font-size: 13px; margin: 2px 4px 2px 0;
+.modal-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
 }
-.loc-manage .sub-tag .x { cursor: pointer; font-weight: bold; }
-.loc-manage .rename-input { width: auto; flex: 1; }
+.modal-buttons button {
+    padding: 6px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    color: #fff;
+}
 
 /* 临期提醒 */
-.alert-box { background: #fff3cd; border: 1px solid #ffe08a; border-radius: 8px; padding: 12px 15px; margin-bottom: 15px; }
-.alert-box h4 { color: #e6a23c; margin-bottom: 8px; font-size: 14px; }
-.alert-box ul { list-style: none; padding: 0; font-size: 13px; color: #666; }
-.alert-box li { padding: 3px 0 3px 20px; position: relative; }
-.alert-box li::before { content: "⚠"; position: absolute; left: 0; }
+.alert-box {
+    background: #fff3cd;
+    border: 1px solid #ffe08a;
+    border-radius: 8px;
+    padding: 12px 15px;
+    margin-bottom: 15px;
+}
+.alert-box h4 {
+    color: #e6a23c;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+.alert-box ul {
+    list-style: none;
+    padding: 0;
+    font-size: 13px;
+    color: #666;
+}
+.alert-box li {
+    padding: 3px 0;
+    padding-left: 20px;
+    position: relative;
+}
+.alert-box li::before {
+    content: "⚠";
+    position: absolute;
+    left: 0;
+}
 .alert-box li.expired-item::before { content: "❌"; }
 
-.empty-tip { text-align: center; color: #999; padding: 20px; font-size: 14px; }
+.empty-tip {
+    text-align: center;
+    color: #999;
+    padding: 20px;
+    font-size: 14px;
+}
 
+/* Toast */
 .toast {
-    position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
-    background: #303133; color: #fff; padding: 10px 20px; border-radius: 5px;
-    font-size: 14px; z-index: 2000; opacity: 0; transition: opacity 0.3s; pointer-events: none;
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #303133;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 14px;
+    z-index: 2000;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
 }
 .toast.show { opacity: 1; }
 
-mark { background: #ffeb3b; padding: 0 2px; border-radius: 2px; }
+/* 高亮搜索 */
+mark {
+    background: #ffeb3b;
+    padding: 0 2px;
+    border-radius: 2px;
+}
 
-@media (max-width: 700px) {
-    body { padding: 10px; }
-    .note-input { width: 90px; }
-    .search-bar input { width: 100%; }
+/* 位置管理 */
+.loc-manage {
+    background: #fff;
+    border-radius: 10px;
+    width: 520px;
+    max-width: 92vw;
+    max-height: 85vh;
+    overflow-y: auto;
+    padding: 22px 25px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+}
+.loc-manage h3 { margin-bottom: 12px; color: #303133; }
+.loc-add-bar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+.loc-add-bar input {
+    flex: 1;
+    padding: 7px 10px;
+    border: 1px solid #dcdfe6;
+    border-radius: 5px;
+    font-size: 14px;
+}
+.loc-add-bar button {
+    padding: 7px 14px;
+    border: none;
+    border-radius: 5px;
+    background: #409eff;
+    color: #fff;
+    cursor: pointer;
+    font-size: 14px;
+    white-space: nowrap;
+}
+.loc-group {
+    border: 1px solid #ebeef5;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    overflow: hidden;
+}
+.loc-group-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #f5f7fa;
+    padding: 8px 10px;
+    font-weight: bold;
+    color: #303133;
+}
+.loc-group-head .loc-name {
+    flex: 1;
+}
+.loc-group-head input {
+    flex: 1;
+    padding: 4px 8px;
+    border: 1px solid #dcdfe6;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: normal;
+}
+.loc-group-head button {
+    border: none;
+    border-radius: 4px;
+    padding: 3px 8px;
+    cursor: pointer;
+    font-size: 12px;
+    color: #fff;
+}
+.btn-edit { background: #e6a23c; }
+.btn-del { background: #f56c6c; }
+.btn-save { background: #67c23a; }
+.loc-sub {
+    padding: 8px 10px 10px 10px;
+}
+.loc-sub-add {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+.loc-sub-add input {
+    flex: 1;
+    padding: 5px 8px;
+    border: 1px solid #dcdfe6;
+    border-radius: 4px;
+    font-size: 13px;
+}
+.loc-sub-add button {
+    padding: 5px 12px;
+    border: none;
+    border-radius: 4px;
+    background: #67c23a;
+    color: #fff;
+    cursor: pointer;
+    font-size: 13px;
+}
+.loc-sub-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: #ecf5ff;
+    border: 1px solid #d9ecff;
+    color: #409eff;
+    border-radius: 14px;
+    padding: 2px 6px 2px 10px;
+    font-size: 13px;
+    margin: 3px 6px 3px 0;
+}
+.loc-sub-tag .tag-del {
+    cursor: pointer;
+    background: rgba(245,108,108,0.15);
+    color: #f56c6c;
+    border-radius: 50%;
+    width: 18px; height: 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    line-height: 1;
+}
+.loc-sub-tag .tag-del:hover { background: #f56c6c; color: #fff; }
+.loc-empty { color: #c0c4cc; font-size: 12px; padding: 2px 0; }
+
+/* ===== 手机端响应式适配 ===== */
+@media screen and (max-width: 768px) {
+    body {
+        padding: 10px;
+        font-size: 16px;
+    }
+    
+    h1 {
+        font-size: 20px;
+        margin-bottom: 10px;
+    }
+    
+    /* 统计卡片：手机上缩小间距、允许滚动 */
+    .stats-bar {
+        gap: 8px;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        padding-bottom: 5px;
+    }
+    .stat-card {
+        min-width: 80px;
+        padding: 8px 12px;
+        flex-shrink: 0;
+    }
+    .stat-card .num {
+        font-size: 18px;
+    }
+    .stat-card .label {
+        font-size: 11px;
+    }
+    
+    /* 顶部工具栏：按钮更大、更好点 */
+    .top-bar {
+        gap: 6px;
+    }
+    .top-bar button {
+        padding: 10px 14px;
+        font-size: 15px;
+        border-radius: 8px;
+    }
+    
+    /* 搜索栏 */
+    .search-bar input {
+        width: 100%;
+        font-size: 16px;  /* 16px 防止 iOS 自动放大 */
+        padding: 10px 16px;
+    }
+    .search-bar select {
+        font-size: 15px;
+        padding: 10px 12px;
+    }
+    
+    /* Tabs */
+    .tabs {
+        gap: 4px;
+    }
+    .tab {
+        padding: 10px 14px;
+        font-size: 15px;
+        border-radius: 8px 8px 0 0;
+    }
+    
+    /* 表格容器：外层包裹横向滚动 */
+    .section {
+        padding: 10px;
+        overflow-x: auto;
+    }
+    
+    table {
+        font-size: 14px;
+        min-width: 700px;  /* 保证列不被压缩 */
+    }
+    
+    th, td {
+        padding: 8px 6px;
+        font-size: 14px;
+        white-space: nowrap;  /* 表头不换行 */
+    }
+    
+    /* 物品名称列：允许换行，给够宽度 */
+    td:first-child input {
+        min-width: 120px;
+        font-size: 15px;
+        padding: 6px 8px;
+        white-space: normal;
+        word-break: break-all;
+    }
+    
+    /* 二级位置下拉 */
+    td select {
+        font-size: 14px;
+        padding: 6px 4px;
+        min-width: 90px;
+    }
+    
+    /* 数量输入 */
+    .qty-input {
+        min-width: 80px;
+        font-size: 14px;
+        padding: 6px 8px;
+    }
+    
+    /* 备注列 */
+    td:nth-last-child(2) input {
+        min-width: 100px;
+        font-size: 14px;
+        padding: 6px 8px;
+        white-space: normal;
+        word-break: break-all;
+    }
+    
+    /* 弹窗 */
+    .modal {
+        width: 95vw;
+        padding: 20px 16px;
+    }
+    .modal input, .modal select {
+        font-size: 16px;
+        padding: 10px;
+    }
+    .modal-buttons button {
+        padding: 10px 20px;
+        font-size: 15px;
+    }
+    
+    /* 位置管理弹窗 */
+    .loc-manage {
+        width: 95vw;
+        padding: 16px;
+    }
+    
+    /* 按钮在手机上更大 */
+    button {
+        min-height: 36px;
+    }
+    
+    /* 搜索框和筛选下拉并排 */
+    .search-bar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .search-bar select {
+        width: 100%;
+    }
+}
+
+/* 超小屏（iPhone SE 等）额外收紧 */
+@media screen and (max-width: 375px) {
+    body { padding: 8px; }
+    h1 { font-size: 18px; }
+    .tab { padding: 8px 10px; font-size: 13px; }
+    table { min-width: 650px; }
+    th, td { padding: 6px 4px; font-size: 13px; }
 }
 </style>
 </head>
@@ -167,17 +612,22 @@ mark { background: #ffeb3b; padding: 0 2px; border-radius: 2px; }
 
 <h1>🏠 居家物品管理</h1>
 
+<!-- 统计概览 -->
 <div class="stats-bar" id="statsBar"></div>
+
+<!-- 临期/过期提醒 -->
 <div id="alertBox"></div>
 
+<!-- 顶部工具栏 -->
 <div class="top-bar">
-    <button class="btn-primary" onclick="addCategory()">📂 分类</button>
-    <button class="btn-info" onclick="openLocationModal()">📍 位置</button>
-    <button class="btn-success" onclick="openImportModal()">📥 导入</button>
-    <button class="btn-warning" onclick="exportData()">📤 导出</button>
-    <button class="btn-info" onclick="resetData()">🔄 默认</button>
+    <button class="btn-primary" onclick="addCategory()">📂 新增一级分类</button>
+    <button class="btn-success" onclick="openLocationModal()">📍 管理位置</button>
+    <button class="btn-warning" onclick="openImportModal()">📥 导入数据</button>
+    <button class="btn-warning" onclick="exportData()">📤 导出数据</button>
+    <button class="btn-info" onclick="resetData()">🔄 恢复默认</button>
 </div>
 
+<!-- 搜索筛选 -->
 <div class="search-bar">
     <input type="text" id="searchInput" placeholder="🔍 搜索物品名称..." oninput="renderContent()">
     <select id="filterStatus" onchange="renderContent()">
@@ -194,19 +644,7 @@ mark { background: #ffeb3b; padding: 0 2px; border-radius: 2px; }
 <div class="tabs" id="tabs"></div>
 <div id="content"></div>
 
-<!-- 批量清理栏 -->
-<div class="clean-bar" id="cleanBar" style="display:none;">
-    <div class="left">
-        <input type="checkbox" id="selectAll" onchange="toggleSelectAll(this)">
-        <label for="selectAll">全选</label>
-        <span id="selectedCount" style="color:#909399;"></span>
-    </div>
-    <div class="right">
-        <button class="btn-danger" onclick="clearUsed()">🗑️ 删除选中（默认勾选已用完/过期）</button>
-    </div>
-</div>
-
-<!-- 通用弹窗 -->
+<!-- 弹窗 -->
 <div class="modal-mask" id="modal">
     <div class="modal">
         <h3 id="modalTitle"></h3>
@@ -226,7 +664,7 @@ mark { background: #ffeb3b; padding: 0 2px; border-radius: 2px; }
         <select id="itemSubCat"></select>
         <select id="itemLocation" onchange="updateItemSubLocs()"></select>
         <select id="itemSubLocation"></select>
-        <input id="itemQty" placeholder="数量（如：2瓶、500g、少许）">
+        <input id="itemQty" placeholder="数量（如：2瓶、500g）">
         <input type="date" id="itemExpire" title="保质期至">
         <input id="itemNote" placeholder="备注（选填）">
         <div class="modal-buttons">
@@ -251,15 +689,15 @@ mark { background: #ffeb3b; padding: 0 2px; border-radius: 2px; }
 
 <!-- 位置管理弹窗 -->
 <div class="modal-mask" id="locationModal">
-    <div class="modal" style="width:460px;">
+    <div class="loc-manage">
         <h3>📍 管理储藏位置</h3>
-        <div class="loc-manage" id="locManage"></div>
-        <div style="display:flex; gap:8px; margin-top:10px;">
-            <input id="newLocName" placeholder="新的一级位置（如：车库）" style="margin:0; flex:1;">
-            <button class="btn-primary" onclick="addLocation()" style="padding:8px 16px;">+ 添加</button>
+        <div class="loc-add-bar">
+            <input id="newLocInput" placeholder="新增一级位置（如：书房）">
+            <button onclick="addPrimaryLocation()">+ 添加</button>
         </div>
+        <div id="locManageList"></div>
         <div class="modal-buttons" style="margin-top:15px;">
-            <button onclick="closeLocationModal()" style="background:#409eff;">完成</button>
+            <button onclick="closeLocationModal()" style="background:#909399;">关闭</button>
         </div>
     </div>
 </div>
@@ -289,11 +727,12 @@ const DEFAULT_DATA = {
     items: []
 };
 
+// ===== 数据 =====
 let data = JSON.parse(localStorage.getItem("homeInventory")) || JSON.parse(JSON.stringify(DEFAULT_DATA));
 let currentTab = Object.keys(data.categories)[0] || "其他";
 let modalAction = "";
 
-// 兼容旧版本
+// 兼容旧版本 localStorage key
 if (localStorage.getItem("homeItems") && !localStorage.getItem("homeInventory")) {
     data.items = JSON.parse(localStorage.getItem("homeItems")) || [];
     if (localStorage.getItem("categories")) data.categories = JSON.parse(localStorage.getItem("categories"));
@@ -308,94 +747,145 @@ function toast(msg) {
     t.classList.add("show");
     setTimeout(() => t.classList.remove("show"), 2000);
 }
+
 function escapeHtml(str) {
     if (!str) return "";
-    return String(str).replace(/[&<>"']/g, s => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[s]));
+    return String(str).replace(/[&<>"']/g, s => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+    }[s]));
 }
-// ★ 修复时区：手动解析 YYYY-MM-DD 为本地日期
+
+function highlight(text, keyword) {
+    if (!keyword) return escapeHtml(text);
+    const escaped = escapeHtml(text);
+    const regex = new RegExp(`(${keyword.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`, "gi");
+    return escaped.replace(regex, "<mark>$1</mark>");
+}
+
+// ===== 保存 =====
+function saveAll() {
+    localStorage.setItem("homeInventory", JSON.stringify(data));
+}
+
+// ★ 手动解析 YYYY-MM-DD 为本地日期，避免时区偏移导致差一天
 function parseLocalDate(dateStr) {
     if (!dateStr) return null;
-    const p = dateStr.split('-');
-    if (p.length !== 3) return new Date(dateStr);
-    return new Date(parseInt(p[0]), parseInt(p[1]) - 1, parseInt(p[2]));
+    const parts = dateStr.split('-');
+    if (parts.length !== 3) return new Date(dateStr);
+    return new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
 }
-// ★ 统一状态判定
+
+// ★ 统一状态判定，统计/提醒/筛选/渲染全部复用，保证一致
 function getStatus(item) {
     if (!item.expire) return 'normal';
-    const today = new Date(); today.setHours(0,0,0,0);
-    const exp = parseLocalDate(item.expire);
-    if (!exp) return 'normal';
-    exp.setHours(0,0,0,0);
-    const diff = Math.ceil((exp - today) / 86400000);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const expDate = parseLocalDate(item.expire);
+    if (!expDate) return 'normal';
+    expDate.setHours(0, 0, 0, 0);
+    const diff = Math.ceil((expDate - today) / (1000 * 60 * 60 * 24));
     if (diff < 0) return 'expired';
     if (diff <= 7) return 'warning';
     return 'normal';
 }
-function saveAll() { localStorage.setItem("homeInventory", JSON.stringify(data)); }
 
 // ===== 统计概览 =====
 function renderStats() {
+    const total = data.items.length;
     let expired = 0, warning = 0;
-    data.items.forEach(i => {
-        const st = getStatus(i);
+
+    data.items.forEach(item => {
+        const st = getStatus(item);
         if (st === 'expired') expired++;
         else if (st === 'warning') warning++;
     });
+
     document.getElementById("statsBar").innerHTML = `
-        <div class="stat-card"><div class="num">${data.items.length}</div><div class="label">总物品数</div></div>
-        <div class="stat-card danger"><div class="num">${expired}</div><div class="label">已过期</div></div>
-        <div class="stat-card warning"><div class="num">${warning}</div><div class="label">临期(7天内)</div></div>
-        <div class="stat-card"><div class="num">${Object.keys(data.categories).length}</div><div class="label">分类数</div></div>
+        <div class="stat-card">
+            <div class="num">${total}</div>
+            <div class="label">总物品数</div>
+        </div>
+        <div class="stat-card danger">
+            <div class="num">${expired}</div>
+            <div class="label">已过期</div>
+        </div>
+        <div class="stat-card warning">
+            <div class="num">${warning}</div>
+            <div class="label">临期(7天内)</div>
+        </div>
+        <div class="stat-card">
+            <div class="num">${Object.keys(data.categories).length}</div>
+            <div class="label">分类数</div>
+        </div>
     `;
 }
 
 // ===== 临期提醒 =====
 function renderAlerts() {
-    const today = new Date(); today.setHours(0,0,0,0);
+    const today = new Date();
+    today.setHours(0,0,0,0);
     const alerts = [];
-    data.items.forEach(item => {
+    const searchKw = (document.getElementById("searchInput")?.value || "").trim();
+
+    data.items.forEach((item, idx) => {
         if (!item.expire) return;
-        const exp = parseLocalDate(item.expire); if (!exp) return;
-        exp.setHours(0,0,0,0);
-        const diff = Math.ceil((exp - today) / 86400000);
-        if (diff < 0) alerts.push({ text: `${item.name}（${item.category}/${item.subCategory}）已过期 ${Math.abs(diff)} 天`, expired: true });
-        else if (diff <= 7) alerts.push({ text: `${item.name}（${item.category}/${item.subCategory}）剩 ${diff} 天过期`, expired: false });
+        const expDate = parseLocalDate(item.expire);
+        if (!expDate) return;
+        expDate.setHours(0,0,0,0);
+        const diff = Math.ceil((expDate - today) / (1000 * 60 * 60 * 24));
+        if (diff < 0) {
+            alerts.push({ idx, text: `${item.name}（${item.category}/${item.subCategory}）已过期 ${Math.abs(diff)} 天`, expired: true });
+        } else if (diff <= 7) {
+            alerts.push({ idx, text: `${item.name}（${item.category}/${item.subCategory}）剩 ${diff} 天过期`, expired: false });
+        }
     });
+
     const box = document.getElementById("alertBox");
-    if (!alerts.length) { box.innerHTML = ""; return; }
+    if (alerts.length === 0) {
+        box.innerHTML = "";
+        return;
+    }
+
     alerts.sort((a, b) => a.expired - b.expired);
     box.innerHTML = `
         <div class="alert-box">
             <h4>⚠️ 保质期提醒（${alerts.length}条）</h4>
             <ul>
-                ${alerts.slice(0,10).map(a => `<li class="${a.expired ? "expired-item" : ""}">${escapeHtml(a.text)}</li>`).join("")}
+                ${alerts.slice(0, 10).map(a => `<li class="${a.expired ? "expired-item" : ""}">${escapeHtml(a.text)}</li>`).join("")}
                 ${alerts.length > 10 ? `<li style="color:#999;">...还有 ${alerts.length - 10} 条</li>` : ""}
             </ul>
-        </div>`;
+        </div>
+    `;
 }
 
-// ===== Tabs =====
+// ===== 渲染一级标签 =====
 function renderTabs() {
-    const el = document.getElementById("tabs");
-    el.innerHTML = "";
+    const tabsEl = document.getElementById("tabs");
+    tabsEl.innerHTML = "";
+
     Object.keys(data.categories).forEach(cat => {
         const count = data.items.filter(i => i.category === cat).length;
         const div = document.createElement("div");
         div.className = "tab" + (cat === currentTab ? " active" : "");
+
         const nameSpan = document.createElement("span");
         nameSpan.innerHTML = `${cat} <span class="tab-count">${count}</span>`;
         nameSpan.onclick = () => { currentTab = cat; renderTabs(); renderContent(); };
         div.appendChild(nameSpan);
+
         if (Object.keys(data.categories).length > 1) {
-            const del = document.createElement("span");
-            del.className = "tab-del"; del.textContent = "×";
-            del.onclick = (e) => { e.stopPropagation(); deleteCategory(cat); };
-            div.appendChild(del);
+            const delBtn = document.createElement("span");
+            delBtn.className = "tab-del";
+            delBtn.textContent = "×";
+            delBtn.onclick = (e) => { e.stopPropagation(); deleteCategory(cat); };
+            div.appendChild(delBtn);
         }
-        el.appendChild(div);
+
+        tabsEl.appendChild(div);
     });
 }
 
+// ===== 获取筛选条件 =====
 function getFilters() {
     return {
         keyword: (document.getElementById("searchInput")?.value || "").trim().toLowerCase(),
@@ -403,29 +893,39 @@ function getFilters() {
         location: document.getElementById("filterLocation")?.value || ""
     };
 }
+
+// ===== 渲染位置筛选器 =====
 function renderLocationFilter() {
     const sel = document.getElementById("filterLocation");
     if (!sel) return;
-    const cur = sel.value;
+    const current = sel.value;
+    const locs = Object.keys(data.locations);
     sel.innerHTML = '<option value="">全部位置</option>' +
-        Object.keys(data.locations).map(l => `<option ${l === cur ? "selected" : ""}>${escapeHtml(l)}</option>`).join("");
+        locs.map(l => `<option value="${escapeHtml(l)}" ${l === current ? "selected" : ""}>${escapeHtml(l)}</option>`).join("");
 }
 
-// ===== 内容渲染 =====
+// ===== 渲染内容 =====
 function renderContent() {
     const content = document.getElementById("content");
     content.innerHTML = "";
-    if (!data.categories[currentTab]) { currentTab = Object.keys(data.categories)[0]; renderTabs(); }
+
+    if (!data.categories[currentTab]) {
+        currentTab = Object.keys(data.categories)[0];
+        renderTabs();
+    }
+
     const subCats = data.categories[currentTab] || [];
-    const today = new Date(); today.setHours(0,0,0,0);
+    const today = new Date();
+    today.setHours(0,0,0,0);
     const filters = getFilters();
+
+    // 渲染位置筛选器
     renderLocationFilter();
 
     if (subCats.length === 0) {
         content.innerHTML = '<div class="empty-tip">暂无二级分类，请点击底部「+ 新增二级分类」</div>';
     }
 
-    let allVisible = [];
     subCats.forEach(subCat => {
         const section = document.createElement("div");
         section.className = "section";
@@ -434,106 +934,136 @@ function renderContent() {
             <button class="btn-add-item" onclick="openAddItemModal('${escapeHtml(subCat)}')">+ 新增物品</button>
             <button class="btn-del-subcat" onclick="deleteSubCategory('${escapeHtml(subCat)}')">删除分类</button>
         </h3>`;
-        const table = document.createElement("table");
-        table.innerHTML = `
-            <thead><tr>
-                <th><input type="checkbox" class="select-row" data-subcat="${escapeHtml(subCat)}"></th>
-                <th>物品名称</th><th>储藏位置</th><th>二级位置</th>
-                <th>数量</th><th>保质期至</th><th>状态</th><th>备注</th><th>操作</th>
-            </tr></thead>
-            <tbody></tbody>`;
-        const tbody = table.querySelector("tbody");
-        let filtered = data.items.filter(i => i.category === currentTab && i.subCategory === subCat);
-        if (filters.keyword) filtered = filtered.filter(i => i.name && i.name.toLowerCase().includes(filters.keyword));
-        if (filters.location) filtered = filtered.filter(i => i.location === filters.location);
-        if (filters.status) filtered = filtered.filter(i => getStatus(i) === filters.status);
-        allVisible = allVisible.concat(filtered);
 
-        if (!filtered.length) {
-            tbody.innerHTML = `<tr><td colspan="9" style="color:#999;padding:15px;">暂无物品</td></tr>`;
+	const tableWrapper = document.createElement("div");
+        tableWrapper.style.overflowX = "auto";
+        tableWrapper.style.webkitOverflowScrolling = "touch";        
+
+	const table = document.createElement("table");
+        table.innerHTML = `
+            <thead>
+                <tr>
+                    <th>物品名称</th>
+                    <th>储藏位置</th>
+                    <th>二级位置</th>
+                    <th>数量</th>
+                    <th>保质期至</th>
+                    <th>状态</th>
+                    <th>备注</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        `;
+        const tbody = table.querySelector("tbody");
+
+        let filtered = data.items.filter(i => i.category === currentTab && i.subCategory === subCat);
+
+        // 搜索筛选
+        if (filters.keyword) {
+            filtered = filtered.filter(i => i.name && i.name.toLowerCase().includes(filters.keyword));
         }
+        if (filters.location) {
+            filtered = filtered.filter(i => i.location === filters.location);
+        }
+        if (filters.status) {
+            filtered = filtered.filter(i => getStatus(i) === filters.status);
+        }
+
+        if (filtered.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="8" style="color:#999;padding:15px;">暂无物品</td></tr>`;
+        }
+
         filtered.forEach(item => {
             const idx = data.items.indexOf(item);
             const st = getStatus(item);
-            let statusText = "✅ 正常", cls = "";
-            if (st === 'expired') { statusText = "❌ 已过期"; cls = "expired"; }
-            else if (st === 'warning') {
-                const exp = parseLocalDate(item.expire); exp.setHours(0,0,0,0);
-                const diff = Math.ceil((exp - today) / 86400000);
-                statusText = `⚠ 临期（剩${diff}天）`; cls = "warning";
+            let status = "✅ 正常";
+            let cls = "";
+
+            if (st === 'expired') {
+                status = "❌ 已过期";
+                cls = "expired";
+            } else if (st === 'warning') {
+                const expDate = parseLocalDate(item.expire);
+                expDate.setHours(0,0,0,0);
+                const diff = Math.ceil((expDate - today) / (1000 * 60 * 60 * 24));
+                status = "⚠ 临期（剩" + diff + "天）";
+                cls = "warning";
             }
-            const isUsed = st === 'expired' || /^(0|0\.0|无|没|用完|空)\b/.test(String(item.qty || "").trim());
-            const locOpts = Object.keys(data.locations).map(l => `<option ${l === item.location ? "selected" : ""}>${escapeHtml(l)}</option>`).join("");
-            const subOpts = (data.locations[item.location] || []).map(s => `<option ${s === item.subLocation ? "selected" : ""}>${escapeHtml(s)}</option>`).join("");
+
+            const locOptions = Object.keys(data.locations).map(l =>
+                `<option ${l === item.location ? "selected" : ""}>${escapeHtml(l)}</option>`
+            ).join("");
+
+            const subLocOptions = (data.locations[item.location] || []).map(s =>
+                `<option ${s === item.subLocation ? "selected" : ""}>${escapeHtml(s)}</option>`
+            ).join("");
+
             tbody.innerHTML += `
                 <tr class="${cls}">
-                    <td><input type="checkbox" class="row-check" data-idx="${idx}" ${isUsed ? "checked" : ""}></td>
-                    <td><input value="${escapeHtml(item.name)}" onchange="update(${idx},'name',this.value)"></td>
-                    <td><select class="location-sel" onchange="update(${idx},'location',this.value);renderContent();">${locOpts}</select></td>
-                    <td><select onchange="update(${idx},'subLocation',this.value)">${subOpts}</select></td>
-                    <td><input class="qty-input" value="${escapeHtml(item.qty)}" placeholder="如: 2瓶" onchange="update(${idx},'qty',this.value)"></td>
-                    <td><input type="date" value="${item.expire || ""}" onchange="update(${idx},'expire',this.value)"></td>
-                    <td>${statusText}</td>
-                    <td><input class="note-input" value="${escapeHtml(item.note || '')}" placeholder="备注" onchange="update(${idx},'note',this.value)"></td>
+                    <td><input value="${escapeHtml(item.name)}" onchange="update(${idx}, 'name', this.value)"></td>
+                    <td>
+                        <select onchange="update(${idx}, 'location', this.value); renderContent();">
+                            ${locOptions}
+                        </select>
+                    </td>
+                    <td>
+                        <select onchange="update(${idx}, 'subLocation', this.value)">
+                            ${subLocOptions}
+                        </select>
+                    </td>
+                    <td>
+                        <input class="qty-input" value="${escapeHtml(item.qty)}" 
+                               placeholder="如: 2瓶、500g、3盒"
+                               onchange="update(${idx}, 'qty', this.value)">
+                    </td>
+                    <td><input type="date" value="${item.expire || ""}" onchange="update(${idx}, 'expire', this.value)"></td>
+                    <td>${status}</td>
+                    <td><input value="${escapeHtml(item.note || '')}" placeholder="备注" onchange="update(${idx}, 'note', this.value)"></td>
                     <td><button style="background:#f56c6c;color:#fff;padding:2px 8px;font-size:12px;border:none;border-radius:3px;cursor:pointer;" onclick="removeItem(${idx})">删除</button></td>
-                </tr>`;
+                </tr>
+            `;
         });
-        section.appendChild(table);
+
+	tableWrapper.appendChild(table);
+        section.appendChild(tableWrapper);
+
         content.appendChild(section);
     });
 
+    // 新增二级分类按钮
     const addBar = document.createElement("div");
     addBar.className = "add-subcat-bar";
     addBar.innerHTML = `<button onclick="addSubCategory()">+ 新增二级分类到「${escapeHtml(currentTab)}」</button>`;
     content.innerHTML += addBar.outerHTML;
 
-    // 清理栏：当前有可见行时才显示
-    const cleanBar = document.getElementById("cleanBar");
-    if (allVisible.length) {
-        cleanBar.style.display = "flex";
-        updateSelectedCount();
-    } else {
-        cleanBar.style.display = "none";
-    }
     renderStats();
     renderAlerts();
 }
 
-function updateSelectedCount() {
-    const n = document.querySelectorAll(".row-check:checked").length;
-    document.getElementById("selectedCount").textContent = n ? `已勾选 ${n} 项` : "";
-}
-function toggleSelectAll(box) {
-    document.querySelectorAll(".row-check").forEach(c => c.checked = box.checked);
-    updateSelectedCount();
-}
-function clearUsed() {
-    const checks = [...document.querySelectorAll(".row-check:checked")];
-    if (!checks.length) { toast("请先勾选要删除的物品"); return; }
-    if (!confirm(`确定删除选中的 ${checks.length} 个物品？`)) return;
-    const ids = checks.map(c => parseInt(c.dataset.idx)).sort((a, b) => b - a);
-    ids.forEach(i => data.items.splice(i, 1));
-    saveAll();
-    renderContent();
-    renderTabs();
-    toast(`已删除 ${checks.length} 项`);
-}
-
-// ===== 分类操作 =====
+// ===== 一级分类操作 =====
 function addCategory() {
     modalAction = "category";
     document.getElementById("modalTitle").textContent = "新增一级分类";
     document.getElementById("modalInput").value = "";
     document.getElementById("modal").style.display = "flex";
 }
+
 function deleteCategory(cat) {
-    if (Object.keys(data.categories).length <= 1) { alert("至少保留一个分类！"); return; }
+    if (Object.keys(data.categories).length <= 1) {
+        alert("至少保留一个分类！");
+        return;
+    }
     if (!confirm(`删除分类「${cat}」？其下所有二级分类和物品将一并删除！`)) return;
     delete data.categories[cat];
     data.items = data.items.filter(i => i.category !== cat);
     if (currentTab === cat) currentTab = Object.keys(data.categories)[0];
-    saveAll(); renderTabs(); renderContent();
+    saveAll();
+    renderTabs();
+    renderContent();
 }
+
+// ===== 二级分类操作 =====
 function addSubCategory() {
     if (!currentTab) return;
     modalAction = "subcat";
@@ -541,18 +1071,29 @@ function addSubCategory() {
     document.getElementById("modalInput").value = "";
     document.getElementById("modal").style.display = "flex";
 }
+
 function deleteSubCategory(subCat) {
     if (!confirm(`删除二级分类「${subCat}」？其下物品也会一起删除`)) return;
     data.categories[currentTab] = data.categories[currentTab].filter(s => s !== subCat);
     data.items = data.items.filter(i => !(i.category === currentTab && i.subCategory === subCat));
-    saveAll(); renderContent();
+    saveAll();
+    renderContent();
 }
 
-// ===== 物品操作 =====
+// ===== 物品操作（弹窗方式） =====
 function openAddItemModal(subCat) {
-    document.getElementById("itemSubCat").innerHTML = (data.categories[currentTab] || []).map(s => `<option ${s === subCat ? "selected" : ""}>${escapeHtml(s)}</option>`).join("");
-    document.getElementById("itemLocation").innerHTML = Object.keys(data.locations).map(l => `<option>${escapeHtml(l)}</option>`).join("");
+    const subCatSel = document.getElementById("itemSubCat");
+    subCatSel.innerHTML = (data.categories[currentTab] || []).map(s =>
+        `<option ${s === subCat ? "selected" : ""}>${escapeHtml(s)}</option>`
+    ).join("");
+
+    const locSel = document.getElementById("itemLocation");
+    locSel.innerHTML = Object.keys(data.locations).map(l =>
+        `<option>${escapeHtml(l)}</option>`
+    ).join("");
+
     updateItemSubLocs();
+
     document.getElementById("itemName").value = "";
     document.getElementById("itemQty").value = "";
     document.getElementById("itemExpire").value = "";
@@ -560,174 +1101,293 @@ function openAddItemModal(subCat) {
     document.getElementById("itemModal").style.display = "flex";
     document.getElementById("itemName").focus();
 }
+
 function updateItemSubLocs() {
     const loc = document.getElementById("itemLocation").value;
-    document.getElementById("itemSubLocation").innerHTML = (data.locations[loc] || []).map(s => `<option>${escapeHtml(s)}</option>`).join("");
+    const subLocSel = document.getElementById("itemSubLocation");
+    subLocSel.innerHTML = (data.locations[loc] || []).map(s =>
+        `<option>${escapeHtml(s)}</option>`
+    ).join("");
 }
-function closeItemModal() { document.getElementById("itemModal").style.display = "none"; }
-function confirmAddItem() {
-    const name = document.getElementById("itemName").value.trim();
-    if (!name) { alert("物品名称不能为空！"); return; }
-    data.items.push({
-        category: currentTab,
-        subCategory: document.getElementById("itemSubCat").value,
-        name,
-        location: document.getElementById("itemLocation").value,
-        subLocation: document.getElementById("itemSubLocation").value,
-        qty: document.getElementById("itemQty").value.trim(),
-        expire: document.getElementById("itemExpire").value,
-        note: document.getElementById("itemNote").value.trim()
-    });
-    saveAll(); closeItemModal(); renderContent(); toast("✅ 物品已添加");
-}
-function removeItem(index) {
-    if (!confirm("确定删除这个物品？")) return;
-    data.items.splice(index, 1);
-    saveAll(); renderContent(); renderTabs(); toast("已删除");
-}
-function update(index, key, value) { data.items[index][key] = value; saveAll(); }
 
-// ===== 位置管理 =====
+// ===== 位置管理（一级/二级均可增删改） =====
 function openLocationModal() {
+    document.getElementById("newLocInput").value = "";
     renderLocationManage();
     document.getElementById("locationModal").style.display = "flex";
 }
+
 function closeLocationModal() {
     document.getElementById("locationModal").style.display = "none";
-    renderContent(); renderLocationFilter();
+    renderLocationFilter();
+    renderContent();
 }
-function renderLocationManage() {
-    const box = document.getElementById("locManage");
-    box.innerHTML = "";
-    Object.keys(data.locations).forEach(loc => {
-        const row = document.createElement("div");
-        row.className = "loc-row";
-        row.innerHTML = `
-            <input class="rename-input" value="${escapeHtml(loc)}" data-old="${escapeHtml(loc)}" onchange="renameLocation(this)">
-            <button class="btn-danger" style="padding:2px 8px;font-size:12px;" onclick="deleteLocation('${escapeHtml(loc)}')">删除</button>`;
-        box.appendChild(row);
 
-        const subWrap = document.createElement("div");
-        subWrap.className = "sub-loc";
-        (data.locations[loc] || []).forEach(sub => {
-            const tag = document.createElement("span");
-            tag.className = "sub-tag";
-            tag.innerHTML = `${escapeHtml(sub)} <span class="x" onclick="deleteSubLocation('${escapeHtml(loc)}','${escapeHtml(sub)}')">×</span>`;
-            subWrap.appendChild(tag);
-        });
-        const addSub = document.createElement("div");
-        addSub.style.marginTop = "6px";
-        addSub.innerHTML = `<input placeholder="添加二级位置" style="width:160px;padding:3px 6px;margin-right:6px;"><button class="btn-success" style="padding:2px 10px;font-size:12px;" onclick="addSubLocation('${escapeHtml(loc)}',this)">+ 添加</button>`;
-        subWrap.appendChild(addSub);
-        box.appendChild(subWrap);
-    });
-}
-function addLocation() {
-    const inp = document.getElementById("newLocName");
-    const val = inp.value.trim();
-    if (!val) { alert("名称不能为空！"); return; }
-    if (data.locations[val]) { alert("该位置已存在！"); return; }
+function addPrimaryLocation() {
+    const input = document.getElementById("newLocInput");
+    const val = input.value.trim();
+    if (!val) { alert("请输入一级位置名称！"); return; }
+    if (data.locations[val] !== undefined) { alert("该一级位置已存在！"); return; }
     data.locations[val] = [];
-    inp.value = "";
-    saveAll(); renderLocationManage(); toast("已添加位置");
-}
-function renameLocation(inp) {
-    const oldName = inp.dataset.old, newName = inp.value.trim();
-    if (!newName || oldName === newName) { inp.value = oldName; return; }
-    if (data.locations[newName]) { alert("该位置已存在！"); inp.value = oldName; return; }
-    // 重命名并同步物品引用
-    data.locations[newName] = data.locations[oldName];
-    delete data.locations[oldName];
-    data.items.forEach(i => { if (i.location === oldName) i.location = newName; });
-    inp.dataset.old = newName;
-    saveAll(); renderContent(); toast("已重命名");
-}
-function deleteLocation(loc) {
-    const used = data.items.filter(i => i.location === loc).length;
-    if (used && !confirm(`「${loc}」下有 ${used} 个物品引用，删除后这些物品的位置将被清空，确定？`)) return;
-    if (!used && !confirm(`确定删除位置「${loc}」？`)) return;
-    data.items.forEach(i => { if (i.location === loc) { i.location = ""; i.subLocation = ""; } });
-    delete data.locations[loc];
-    saveAll(); renderLocationManage(); renderContent();
-}
-function addSubLocation(loc, btn) {
-    const inp = btn.previousElementSibling;
-    const val = inp.value.trim();
-    if (!val) return;
-    if (data.locations[loc].includes(val)) { alert("该二级位置已存在！"); return; }
-    data.locations[loc].push(val);
-    inp.value = "";
-    saveAll(); renderLocationManage(); renderContent();
-}
-function deleteSubLocation(loc, sub) {
-    const used = data.items.filter(i => i.location === loc && i.subLocation === sub).length;
-    if (used && !confirm(`有 ${used} 个物品使用「${sub}」，删除后它们的二级位置将被清空，确定？`)) return;
-    data.locations[loc] = data.locations[loc].filter(s => s !== sub);
-    data.items.forEach(i => { if (i.location === loc && i.subLocation === sub) i.subLocation = ""; });
-    saveAll(); renderLocationManage(); renderContent();
+    input.value = "";
+    saveAll();
+    renderLocationManage();
+    toast("✅ 一级位置已添加");
 }
 
-// ===== 弹窗通用 =====
-function closeModal() { document.getElementById("modal").style.display = "none"; }
+function deletePrimaryLocation(loc) {
+    const used = data.items.filter(i => i.location === loc).length;
+    let msg = `删除一级位置「${loc}」？`;
+    if (used > 0) msg += `\n注意：其下 ${used} 件物品的「储藏位置」将被清空，需重新指定。`;
+    if (!confirm(msg)) return;
+    delete data.locations[loc];
+    data.items.forEach(i => { if (i.location === loc) { i.location = ""; i.subLocation = ""; } });
+    saveAll();
+    renderLocationManage();
+    renderLocationFilter();
+    renderContent();
+    toast("已删除一级位置");
+}
+
+function renamePrimaryLocation(oldName, newName) {
+    newName = (newName || "").trim();
+    if (!newName) { alert("名称不能为空！"); renderLocationManage(); return; }
+    if (newName === oldName) { renderLocationManage(); return; }
+    if (data.locations[newName] !== undefined) { alert("该一级位置已存在！"); renderLocationManage(); return; }
+    // 保留数组顺序：重建对象
+    const newLocs = {};
+    Object.keys(data.locations).forEach(k => {
+        if (k === oldName) {
+            newLocs[newName] = data.locations[k];
+        } else {
+            newLocs[k] = data.locations[k];
+        }
+    });
+    data.locations = newLocs;
+    // 同步物品引用
+    data.items.forEach(i => { if (i.location === oldName) i.location = newName; });
+    saveAll();
+    renderLocationManage();
+    renderLocationFilter();
+    renderContent();
+}
+
+function addSecondaryLocation(loc) {
+    const input = document.getElementById("newSubLoc_" + loc);
+    const val = input.value.trim();
+    if (!val) { alert("请输入二级位置名称！"); return; }
+    if ((data.locations[loc] || []).includes(val)) { alert("该二级位置已存在！"); return; }
+    data.locations[loc].push(val);
+    input.value = "";
+    saveAll();
+    renderLocationManage();
+    toast("✅ 二级位置已添加");
+}
+
+function deleteSecondaryLocation(loc, sub) {
+    const used = data.items.filter(i => i.location === loc && i.subLocation === sub).length;
+    if (used > 0 && !confirm(`二级位置「${sub}」下有 ${used} 件物品引用，删除后这些物品的二级位置将被清空。继续？`)) return;
+    data.locations[loc] = (data.locations[loc] || []).filter(s => s !== sub);
+    data.items.forEach(i => { if (i.location === loc && i.subLocation === sub) i.subLocation = ""; });
+    saveAll();
+    renderLocationManage();
+    renderContent();
+    toast("已删除二级位置");
+}
+
+function renderLocationManage() {
+    const list = document.getElementById("locManageList");
+    if (!list) return;
+    const locs = Object.keys(data.locations);
+    if (locs.length === 0) {
+        list.innerHTML = '<div class="empty-tip">暂无位置，请在上方添加</div>';
+        return;
+    }
+    list.innerHTML = locs.map(loc => {
+        const subs = data.locations[loc] || [];
+        return `
+            <div class="loc-group">
+                <div class="loc-group-head">
+                    <span class="loc-name" id="locName_${escapeHtml(loc)}">${escapeHtml(loc)}</span>
+                    <button class="btn-edit" onclick="editPrimaryName('${escapeHtml(loc)}')">重命名</button>
+                    <button class="btn-del" onclick="deletePrimaryLocation('${escapeHtml(loc)}')">删除</button>
+                </div>
+                <div class="loc-sub">
+                    <div class="loc-sub-add">
+                        <input id="newSubLoc_${escapeHtml(loc)}" placeholder="新增二级位置（如：上层搁板）">
+                        <button onclick="addSecondaryLocation('${escapeHtml(loc)}')">+ 添加</button>
+                    </div>
+                    ${subs.length === 0
+                        ? '<span class="loc-empty">暂无二级位置</span>'
+                        : subs.map(sub => `
+                            <span class="loc-sub-tag">
+                                ${escapeHtml(sub)}
+                                <span class="tag-del" onclick="deleteSecondaryLocation('${escapeHtml(loc)}','${escapeHtml(sub)}')">×</span>
+                            </span>
+                        `).join("")
+                    }
+                </div>
+            </div>
+        `;
+    }).join("");
+}
+
+// 行内重命名一级位置
+function editPrimaryName(oldName) {
+    const span = document.getElementById("locName_" + oldName);
+    if (!span) return;
+    const current = span.textContent;
+    const input = document.createElement("input");
+    input.value = current;
+    span.replaceWith(input);
+    input.focus();
+    input.select();
+    const finish = () => {
+        renamePrimaryLocation(oldName, input.value);
+    };
+    input.addEventListener("blur", finish);
+    input.addEventListener("keydown", e => { if (e.key === "Enter") input.blur(); });
+}
+
+function closeItemModal() {
+    document.getElementById("itemModal").style.display = "none";
+}
+
+function confirmAddItem() {
+    const name = document.getElementById("itemName").value.trim();
+    if (!name) { alert("物品名称不能为空！"); return; }
+
+    const subCat = document.getElementById("itemSubCat").value;
+    const location = document.getElementById("itemLocation").value;
+    const subLocation = document.getElementById("itemSubLocation").value;
+    const qty = document.getElementById("itemQty").value.trim();
+    const expire = document.getElementById("itemExpire").value;
+    const note = document.getElementById("itemNote").value.trim();
+
+    data.items.push({
+        category: currentTab,
+        subCategory: subCat,
+        name,
+        location,
+        subLocation,
+        qty,
+        expire,
+        note
+    });
+    saveAll();
+    closeItemModal();
+    renderContent();
+    toast("✅ 物品已添加");
+}
+
+function removeItem(index) {
+    if (!confirm("确定删除这个物品？")) return;
+    data.items.splice(index, 1);
+    saveAll();
+    renderContent();
+    toast("已删除");
+}
+
+function update(index, key, value) {
+    data.items[index][key] = value;
+    saveAll();
+    // 位置联动不需要全量重渲染（已在 onchange 中处理）
+}
+
+// ===== 弹窗 =====
+function closeModal() {
+    document.getElementById("modal").style.display = "none";
+}
+
 function confirmModal() {
     const val = document.getElementById("modalInput").value.trim();
     if (!val) { alert("名称不能为空！"); return; }
+
     if (modalAction === "category") {
         if (data.categories[val]) { alert("该分类已存在！"); return; }
         if (data.categories["其他"] !== undefined) {
             const newObj = {};
-            Object.keys(data.categories).forEach(k => { if (k === "其他") newObj[val] = []; newObj[k] = data.categories[k]; });
+            Object.keys(data.categories).forEach(k => {
+                if (k === "其他") {
+                    newObj[val] = [];
+                }
+                newObj[k] = data.categories[k];
+            });
             data.categories = newObj;
-        } else data.categories[val] = [];
+        } else {
+            data.categories[val] = [];
+        }
         currentTab = val;
     } else if (modalAction === "subcat") {
         if (!data.categories[currentTab]) data.categories[currentTab] = [];
         if (data.categories[currentTab].includes(val)) { alert("该二级分类已存在！"); return; }
         data.categories[currentTab].push(val);
     }
-    saveAll(); closeModal(); renderTabs(); renderContent();
+    saveAll();
+    closeModal();
+    renderTabs();
+    renderContent();
 }
 
 // ===== 导入/导出 =====
 function exportData() {
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+    const json = JSON.stringify(data, null, 2);
+    const blob = new Blob([json], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
+    const date = new Date().toISOString().slice(0, 10);
     a.href = url;
-    a.download = `居家物品数据_${new Date().toISOString().slice(0,10)}.json`;
+    a.download = `居家物品数据_${date}.json`;
     a.click();
     URL.revokeObjectURL(url);
     toast("📤 数据已导出");
 }
-function openImportModal() { document.getElementById("importData").value = ""; document.getElementById("importModal").style.display = "flex"; }
-function closeImportModal() { document.getElementById("importModal").style.display = "none"; }
+
+function openImportModal() {
+    document.getElementById("importData").value = "";
+    document.getElementById("importModal").style.display = "flex";
+}
+
+function closeImportModal() {
+    document.getElementById("importModal").style.display = "none";
+}
+
 function doImport() {
     const text = document.getElementById("importData").value.trim();
     if (!text) { alert("请粘贴 JSON 数据！"); return; }
     try {
         const parsed = JSON.parse(text);
-        if (!parsed.categories || !parsed.locations) { alert("数据格式不正确！"); return; }
+        if (!parsed.categories || !parsed.locations) {
+            alert("数据格式不正确，缺少 categories 或 locations！");
+            return;
+        }
         if (!Array.isArray(parsed.items)) parsed.items = [];
-        if (!confirm("导入将覆盖当前数据，确定？")) return;
         data = parsed;
         currentTab = Object.keys(data.categories)[0] || "其他";
-        saveAll(); closeImportModal(); renderTabs(); renderContent(); toast("📥 数据已导入");
-    } catch(e) { alert("JSON 解析失败：" + e.message); }
+        saveAll();
+        closeImportModal();
+        renderTabs();
+        renderContent();
+        toast("📥 数据已导入");
+    } catch(e) {
+        alert("JSON 解析失败：" + e.message);
+    }
 }
+
+// ===== 重置 =====
 function resetData() {
     if (!confirm("确定恢复默认数据？当前所有数据将被覆盖！")) return;
     localStorage.removeItem("homeInventory");
+    localStorage.removeItem("categories");
+    localStorage.removeItem("locations");
+    localStorage.removeItem("homeItems");
     location.reload();
 }
 
 // ===== 初始化 =====
 renderTabs();
 renderContent();
-
-// ★ PWA：注册 Service Worker（必须 http:// 或 https:// 环境才生效，本地 file:// 会跳过）
-if ("serviceWorker" in navigator && location.protocol !== "file:") {
-    navigator.serviceWorker.register("sw.js").catch(err => console.warn("SW 注册失败：", err));
-}
 </script>
+
 </body>
 </html>
