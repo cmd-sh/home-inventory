@@ -451,19 +451,11 @@ mark {
 .loc-sub-tag .tag-del:hover { background: #f56c6c; color: #fff; }
 .loc-empty { color: #c0c4cc; font-size: 12px; padding: 2px 0; }
 
-/* ===== 手机端响应式适配 ===== */
+/* ===== 手机端响应式适配（新增） ===== */
 @media screen and (max-width: 768px) {
-    body {
-        padding: 10px;
-        font-size: 16px;
-    }
-    
-    h1 {
-        font-size: 20px;
-        margin-bottom: 10px;
-    }
-    
-    /* 统计卡片：手机上缩小间距、允许滚动 */
+    body { padding: 10px 16px; font-size: 16px; }
+    h1 { font-size: 20px; margin-bottom: 10px; }
+
     .stats-bar {
         gap: 8px;
         overflow-x: auto;
@@ -471,67 +463,25 @@ mark {
         justify-content: flex-start;
         padding-bottom: 5px;
     }
-    .stat-card {
-        min-width: 80px;
-        padding: 8px 12px;
-        flex-shrink: 0;
-    }
-    .stat-card .num {
-        font-size: 18px;
-    }
-    .stat-card .label {
-        font-size: 11px;
-    }
-    
-    /* 顶部工具栏：按钮更大、更好点 */
-    .top-bar {
-        gap: 6px;
-    }
-    .top-bar button {
-        padding: 10px 14px;
-        font-size: 15px;
-        border-radius: 8px;
-    }
-    
-    /* 搜索栏 */
-    .search-bar input {
-        width: 100%;
-        font-size: 16px;  /* 16px 防止 iOS 自动放大 */
-        padding: 10px 16px;
-    }
-    .search-bar select {
-        font-size: 15px;
-        padding: 10px 12px;
-    }
-    
-    /* Tabs */
-    .tabs {
-        gap: 4px;
-    }
-    .tab {
-        padding: 10px 14px;
-        font-size: 15px;
-        border-radius: 8px 8px 0 0;
-    }
-    
-    /* 表格容器：外层包裹横向滚动 */
-    .section {
-        padding: 10px;
-        overflow-x: auto;
-    }
-    
-    table {
-        font-size: 14px;
-        min-width: 700px;  /* 保证列不被压缩 */
-    }
-    
-    th, td {
-        padding: 8px 6px;
-        font-size: 14px;
-        white-space: nowrap;  /* 表头不换行 */
-    }
-    
-    /* 物品名称列：允许换行，给够宽度 */
+    .stat-card { min-width: 80px; padding: 8px 12px; flex-shrink: 0; }
+    .stat-card .num { font-size: 18px; }
+    .stat-card .label { font-size: 11px; }
+
+    .top-bar { gap: 6px; }
+    .top-bar button { padding: 10px 14px; font-size: 15px; border-radius: 8px; }
+
+    .search-bar { flex-direction: column; align-items: stretch; }
+    .search-bar input { width: 100%; font-size: 16px; padding: 10px 16px; }
+    .search-bar select { width: 100%; font-size: 15px; padding: 10px 12px; }
+
+    .tabs { gap: 4px; }
+    .tab { padding: 10px 14px; font-size: 15px; border-radius: 8px 8px 0 0; }
+
+    .section { padding: 10px; overflow-x: auto; }
+
+    table { font-size: 14px; min-width: 700px; }
+    th, td { padding: 8px 6px; font-size: 14px; white-space: nowrap; }
+
     td:first-child input {
         min-width: 120px;
         font-size: 15px;
@@ -539,22 +489,8 @@ mark {
         white-space: normal;
         word-break: break-all;
     }
-    
-    /* 二级位置下拉 */
-    td select {
-        font-size: 14px;
-        padding: 6px 4px;
-        min-width: 90px;
-    }
-    
-    /* 数量输入 */
-    .qty-input {
-        min-width: 80px;
-        font-size: 14px;
-        padding: 6px 8px;
-    }
-    
-    /* 备注列 */
+    td select { font-size: 14px; padding: 6px 4px; min-width: 90px; }
+    .qty-input { min-width: 80px; font-size: 14px; padding: 6px 8px; }
     td:nth-last-child(2) input {
         min-width: 100px;
         font-size: 14px;
@@ -562,43 +498,13 @@ mark {
         white-space: normal;
         word-break: break-all;
     }
-    
-    /* 弹窗 */
-    .modal {
-        width: 95vw;
-        padding: 20px 16px;
-    }
-    .modal input, .modal select {
-        font-size: 16px;
-        padding: 10px;
-    }
-    .modal-buttons button {
-        padding: 10px 20px;
-        font-size: 15px;
-    }
-    
-    /* 位置管理弹窗 */
-    .loc-manage {
-        width: 95vw;
-        padding: 16px;
-    }
-    
-    /* 按钮在手机上更大 */
-    button {
-        min-height: 36px;
-    }
-    
-    /* 搜索框和筛选下拉并排 */
-    .search-bar {
-        flex-direction: column;
-        align-items: stretch;
-    }
-    .search-bar select {
-        width: 100%;
-    }
+
+    .modal, .loc-manage { width: 95vw; padding: 20px 16px; }
+    .modal input, .modal select { font-size: 16px; padding: 10px; }
+    .modal-buttons button { padding: 10px 20px; font-size: 15px; }
+    button { min-height: 36px; }
 }
 
-/* 超小屏（iPhone SE 等）额外收紧 */
 @media screen and (max-width: 375px) {
     body { padding: 8px; }
     h1 { font-size: 18px; }
@@ -825,7 +731,6 @@ function renderAlerts() {
     const today = new Date();
     today.setHours(0,0,0,0);
     const alerts = [];
-    const searchKw = (document.getElementById("searchInput")?.value || "").trim();
 
     data.items.forEach((item, idx) => {
         if (!item.expire) return;
@@ -935,11 +840,12 @@ function renderContent() {
             <button class="btn-del-subcat" onclick="deleteSubCategory('${escapeHtml(subCat)}')">删除分类</button>
         </h3>`;
 
-	const tableWrapper = document.createElement("div");
+        // ★ 表格外层加横向滚动容器（手机端可左右滑动）
+        const tableWrapper = document.createElement("div");
         tableWrapper.style.overflowX = "auto";
-        tableWrapper.style.webkitOverflowScrolling = "touch";        
+        tableWrapper.style.webkitOverflowScrolling = "touch";
 
-	const table = document.createElement("table");
+        const table = document.createElement("table");
         table.innerHTML = `
             <thead>
                 <tr>
@@ -1013,7 +919,7 @@ function renderContent() {
                         </select>
                     </td>
                     <td>
-                        <input class="qty-input" value="${escapeHtml(item.qty)}" 
+                        <input class="qty-input" value="${escapeHtml(item.qty)}"
                                placeholder="如: 2瓶、500g、3盒"
                                onchange="update(${idx}, 'qty', this.value)">
                     </td>
@@ -1025,9 +931,8 @@ function renderContent() {
             `;
         });
 
-	tableWrapper.appendChild(table);
+        tableWrapper.appendChild(table);
         section.appendChild(tableWrapper);
-
         content.appendChild(section);
     });
 
@@ -1387,6 +1292,16 @@ function resetData() {
 // ===== 初始化 =====
 renderTabs();
 renderContent();
+
+// ★ 注销旧的 Service Worker 缓存，确保手机端加载最新版本
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.getRegistrations().then(regs => {
+        regs.forEach(reg => reg.unregister());
+    });
+    caches && caches.keys && caches.keys().then(keys => {
+        keys.forEach(k => caches.delete(k));
+    });
+}
 </script>
 
 </body>
